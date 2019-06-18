@@ -5,14 +5,16 @@ namespace TinyCRM
 {
     public class UserInterface
     {
-        public int _enteringNumber;
-        public Customer _customer;
-        public CustomerService _service;
+        private int _enteringNumber;
+        private Customer _customer;
+        private CustomerService _service;
+
+
         public UserInterface()
         {            
         }
-                
-        public void ShowMainMenu()
+
+        internal void ShowMainMenu()
         {
             Console.WriteLine("====>MENU<====");
             Console.WriteLine("1. Add new customer");
@@ -21,30 +23,22 @@ namespace TinyCRM
             Console.WriteLine("4. Show customers");
             Console.WriteLine("5. Exit");
             Console.WriteLine("Input your option: ");
-            
             try
             {
                 _enteringNumber = Convert.ToInt32(Console.ReadLine());
             }
-            catch (Exception )
+            catch (Exception)
             {
-                
+                throw;
             }
         }
 
-        internal void ShowEnteringIdToEdit()
-        {
-            Console.Write("Input id customer to edit: ");
-            _enteringNumber = Convert.ToInt32(Console.ReadLine());
-
-        }
-
-        public int GetEnteringInputNumber()
+        internal int GetEnteringInputNumber()
         {
             return _enteringNumber;
         }
 
-        public void ShowEnteringCustomer()
+        internal void ShowEnteringCustomer()
         {
             _service = new CustomerService();
             _customer = new Customer();
@@ -58,7 +52,8 @@ namespace TinyCRM
                 if (_service.IsValidEmail(_customer.EmailOffice))
                 {
                     break;
-                } else
+                }
+                else
                 {
                     Console.WriteLine("Invalid email address, please input again");
                 }
@@ -105,13 +100,8 @@ namespace TinyCRM
             }
         }
 
-        internal void ShowEnteringIdToDelete()
-        {
-            Console.Write("Input id customer to delete: ");
-            _enteringNumber = Convert.ToInt32(Console.ReadLine());
-        }
 
-        public Customer GetEnteringCustomer()
+        internal Customer GetEnteringCustomer()
         {
             return _customer;
         }
@@ -127,7 +117,7 @@ namespace TinyCRM
             return false;
         }
 
-        public void ShowCustomer(Customer _customer)
+        internal void ShowCustomer(Customer _customer)
         {
             Console.WriteLine("Id: {0}", _customer.Id);
             Console.WriteLine("Name: {0}", _customer.Name);
@@ -137,12 +127,12 @@ namespace TinyCRM
             Console.WriteLine("Phone Home: {0}", _customer.PhoneHome);
         }
 
-        public void Inform(string v)
+        internal void Inform(string v)
         {
             Console.WriteLine(v);
         }
 
-        public void ShowOptionViewCustomer()
+        internal void ShowOptionViewCustomer()
         {
             Console.WriteLine("====>Menu show customer<====");
             Console.WriteLine("41. Show all customers");
@@ -151,13 +141,13 @@ namespace TinyCRM
             _enteringNumber = Convert.ToInt32(Console.ReadLine());
         }
 
-        internal void ShowEnteringIdToView()
+        internal void ShowEnteringId(string inform)
         {
-            Console.Write("Input id customer to View: ");
+            Console.Write(inform);
             _enteringNumber = Convert.ToInt32(Console.ReadLine());
         }
 
-        public void ShowAllCustomers(List<Customer> listCustomer)
+        internal void ShowAllCustomers(List<Customer> listCustomer)
         {            
             foreach(var item in listCustomer)
             {

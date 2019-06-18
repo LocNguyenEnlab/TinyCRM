@@ -1,14 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace TinyCRM
 {
     public class CustomerService
     {
-        List<Customer> FakeData = new List<Customer>();
+        private List<Customer> _customers;
+
+
         public CustomerService()
         {
-            Customer cus = new Customer
+            _customers = new List<Customer>();
+            var customer = new Customer
             {
                 Id = 1,
                 Name = "LOC",
@@ -17,36 +21,35 @@ namespace TinyCRM
                 EmailOffice = "loc.nguyen@enlabsoftware.com",
                 PhoneOffice = 456
             };
-            FakeData.Add(cus);
+            _customers.Add(customer);
         }
 
-        public void Save(Customer customer)
+        public Result Save(Customer customer)
         {
-            if (FakeData.Count == 0)
+            if (IsDuplicateCustomer(customer))
+                return new Result() { Error = Errors.DuplicateCustomer, Message = "Customer already exists. Please input another one." };
+
+            if (_customers.Count == 0)
             {
                 customer.Id = 1;
-            } else
-            {
-                customer.Id = FakeData[FakeData.Count - 1].Id + 1;
             }
-            FakeData.Add(customer);
+            else
+            {
+                customer.Id = _customers.Last().Id + 1;
+            }
+            _customers.Add(customer);
+
+            return new Result() { Error = Errors.None, Message = "Add customer successfully!" };
         }
 
-        internal Customer GetCustomerById(int idCustomer)
+        internal Customer GetCustomer(int customerId)
         {
-            foreach(var item in FakeData)
-            {
-                if (item.Id == idCustomer)
-                {
-                    return item;
-                }
-            }
-            return null;
+            return _customers.FirstOrDefault(customer => customer.Id == customerId);
         }
 
-        internal bool IsValidCustomerByCustomer(Customer newCustomer)
+        internal bool IsDuplicateCustomer(Customer newCustomer)
         {
-            foreach(var item in FakeData)
+            foreach(var item in _customers)
             {
                 if (item.Compare(newCustomer))
                     return false;
@@ -54,33 +57,14 @@ namespace TinyCRM
             return true;
         }
 
-        internal bool IsValidCustomerById(int idCustomer)
+        internal void Delete(Customer customer)
         {
-            foreach (var item in FakeData)
-            {
-                if (item.Id == idCustomer)
-                {
-                    return true;
-                }
-            }
-            return false;
+            _customers.Remove(customer);
         }
 
-        internal void DeleteById(int idCustomer)
+        public List<Customer> GetCustomers()
         {
-            foreach(var item in FakeData)
-            {
-                if (item.Id == idCustomer)
-                {
-                    FakeData.Remove(item);
-                    break;
-                }
-            }
-        }
-
-        public List<Customer> GetAllCustomers()
-        {
-            return FakeData;
+            return _customers;
         }
 
         public bool IsValidEmail(string email)

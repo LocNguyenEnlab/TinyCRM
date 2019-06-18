@@ -9,7 +9,11 @@
         public string EmailHome { get; set; }
         public int PhoneHome { get; set; }
 
-        //return true if this.customer = customer, false if not equal
+        /// <summary>
+        /// Compare 2 customer objects based on their name, emails, phones
+        /// </summary>
+        /// <param name="customer"></param>
+        /// <returns>Return true if this.customer = customer, false if not equal</returns>
         public bool Compare(Customer customer)
         {
             if (customer.Name != this.Name)
@@ -20,7 +24,7 @@
                 return false;
             if (customer.EmailOffice != this.EmailOffice)
                 return false;
-            if (customer.PhoneHome != this.PhoneHome)
+            if (customer.PhoneOffice != this.PhoneOffice)
                 return false;
             return true;
         }

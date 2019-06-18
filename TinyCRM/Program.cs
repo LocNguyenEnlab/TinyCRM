@@ -19,26 +19,14 @@ namespace TinyCRM
                 {
                     case 1: //Add new customer
                         ui.ShowEnteringCustomer();
-                        Customer newCustomer = new Customer();
-                        newCustomer = ui.GetEnteringCustomer();
-                        //check duplicate customer
-                        if (logic.IsValidCustomerByCustomer(newCustomer))
-                        {
-                            logic.Save(newCustomer);
-                            ui.Inform("Added a new customer!");
-                        }
-                        else
-                        {
-                            ui.Inform("Customer is already exist");
-                        }
-
+                        var newCustomer = ui.GetEnteringCustomer();
+                        var result = logic.Save(newCustomer);
+                        ui.Inform(result.Message);                        
                         break;
                     case 2: //Edit a customer
-                        ui.ShowEnteringIdToEdit();
+                        ui.ShowEnteringId("Input id to edit customer: ");
                         int idCustomerEdit = ui.GetEnteringInputNumber();
-
-                        Customer editCustomer = new Customer();
-                        editCustomer = logic.GetCustomerById(idCustomerEdit);
+                        Customer editCustomer = logic.GetCustomer(idCustomerEdit);
                         ui.ShowCustomer(editCustomer);
                         ui.Inform("===>Start update customer");
                         ui.ShowEnteringCustomer();
@@ -54,13 +42,14 @@ namespace TinyCRM
                         }
                         break;
                     case 3: //delete a customer
-                        ui.ShowEnteringIdToDelete();
-                        int idCustomerDelete = ui.GetEnteringInputNumber();
-                        if (logic.IsValidCustomerById(idCustomerDelete))
+                        ui.ShowEnteringId("Input id to delete customer: ");
+                        int customerId = ui.GetEnteringInputNumber();
+                        var customer = logic.GetCustomer(customerId);
+                        if (customer != null)
                         {
                             if (ui.IsConfirmed())
                             {
-                                logic.DeleteById(idCustomerDelete);
+                                logic.Delete(customer);
                                 ui.Inform("Customer is deleted!");
                             }
                         }
@@ -75,23 +64,20 @@ namespace TinyCRM
                         switch (selectView)
                         {
                             case 41: //show all customers
-                                List<Customer> listCustomer = new List<Customer>();
-                                listCustomer = logic.GetAllCustomers();
-                                ui.ShowAllCustomers(listCustomer);
+                                List<Customer> customers = logic.GetCustomers();
+                                ui.ShowAllCustomers(customers);
                                 break;
                             case 42: //show a customer
-                                ui.ShowEnteringIdToView();
+                                ui.ShowEnteringId("Input id to view customer: ");
                                 int idCustomerShow = ui.GetEnteringInputNumber();
-                                if (logic.IsValidCustomerById(idCustomerShow))
-                                {
-                                    Customer customerShow = new Customer();
-                                    customerShow = logic.GetCustomerById(idCustomerShow);
+                                Customer customerShow = logic.GetCustomer(idCustomerShow);
+                                if (customerShow != null)
+                                {                                    
                                     ui.ShowCustomer(customerShow);
                                 }
                                 else
                                 {
                                     ui.Inform("Invalid Customer Id!");
-
                                 }
                                 break;
                         }
